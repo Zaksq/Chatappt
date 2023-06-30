@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Chat App</title>
+    <link rel="stylesheet" href="/static/css/style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,6 +47,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            var csrf_token = '{{ csrf_token }}';
+
             $('#message-form').on('submit', function(event) {
                 event.preventDefault();
                 var message = $('#message-input').val();
@@ -54,7 +57,7 @@
                     type: 'POST',
                     data: {
                         'message': message,
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        'csrfmiddlewaretoken': csrf_token
                     },
                     success: function(response) {
                         if (response.status === 'success') {
@@ -62,6 +65,20 @@
                             $('#messages').append('<li>' + message + '</li>');
                         }
                     }
+                });
+            });
+
+            $('#change-background-button').click(function() {
+                $.post('/chat/change_background/', {
+                    'csrfmiddlewaretoken': csrf_token
+                }, function(data) {
+                    if (data.background_mode === 'dark') {
+                        $('body').addClass('dark-mode');
+                    } else {
+                        $('body').removeClass('dark-mode');
+                    }
+                }).fail(function(data) {
+                    console.log('Ошибка при смене фона:', data.error);
                 });
             });
         });
@@ -79,5 +96,6 @@
         <input type="text" id="message-input" autocomplete="off">
         <button type="submit">Отправить</button>
     </form>
+    <button id="change-background-button" data-csrf="{{ csrf_token }}">Сменить фон</button>
 </body>
 </html>
