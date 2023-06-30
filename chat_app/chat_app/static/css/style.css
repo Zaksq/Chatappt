@@ -1,0 +1,25 @@
+css
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+#messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+#message-form {
+    margin-top: 20px;
+}
+
+#message-input {
+    width: 200px;
+}
+
+button {
+    margin-left: 10px;
+}
